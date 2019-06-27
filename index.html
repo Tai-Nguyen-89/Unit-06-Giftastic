@@ -38,7 +38,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript">
             // Initial array of movies
-            var movies = ["The Matrix", "The Notebook", "Mr. Nobody", "The Lion King"];
+            var movies = ["Starcraft", "Chrono Trigger", "Stargate", "Star Wars"];
 
             // displayMovieInfo function re-renders the HTML to display the appropriate content
             function displayMovieInfo() {
@@ -58,8 +58,8 @@
 
                     // Gif Sorter. .data. Searches the .data for images and displays them.
 
-                    var state = $(this).attr("data-state");
-                    console.log(state);
+                    // var state = $(this).attr("data-state");
+                    // console.log(state);
 
                     // response.data is the array of gifs. We change it to results to access more easily.
                     var results = response.data;
@@ -73,10 +73,9 @@
 
                         var personImage = $("<img class='gif'>");
                         personImage.attr("src", results[i].images.fixed_height.url);
-                        personImage.attr("data-still", results[i].images.fixed_height.url);
-                        personImage.attr("data-animate", results[i].images.original_still); 
-                        personImage.attr("data-state='still'");{
-
+                        personImage.attr("data-still", results[i].images.fixed_height_still.url);
+                        personImage.attr("data-animate", results[i].images.fixed_height.url); 
+                        personImage.attr("data-state", "animate");{
 
                             // Need to generate image sources with a "still" id. & "replace with animate tag" 
                             // // That didn't work, so added attr to personImage for data-still and data-animate. mimicking pausing-gifs activity.
