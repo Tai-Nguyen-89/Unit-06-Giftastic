@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Favorite Movies</title>
+    <title>Gif Searcher</title>
     <style type="text/css">
         button,
         div,
@@ -17,18 +17,18 @@
 <body>
 
     <div class="container">
-        <h1>Movie Search</h1>
+        <h1>Search a gif!</h1>
 
         <!-- Rendered Buttons will get Dumped Here  -->
         <div id="buttons-view"></div>
 
         <form id="movie-form">
-            <label for="movie-input">Add a Movie, Yo!</label>
+            <label for="movie-input">Add a Gif!</label>
             <input type="text" id="movie-input">
             <br>
 
             <!-- Button triggers new movie to be added -->
-            <input id="add-movie" type="submit" value="Add a Movie, Yo!">
+            <input id="add-movie" type="submit" value="Add a Gif!">
         </form>
 
         <!-- Movies will Get Dumped Here -->
@@ -58,6 +58,10 @@
 
                     // Gif Sorter. .data. Searches the .data for images and displays them.
 
+                    var state = $(this).attr("data-state");
+                    console.log(state);
+
+                    // response.data is the array of gifs. We change it to results to access more easily.
                     var results = response.data;
 
                     for (var i = 0; i < results.length; i++) {
@@ -67,17 +71,46 @@
 
                         var p = $("<p>").text("Rating: " + rating);
 
-                        var personImage = $("<img>");
+                        var personImage = $("<img class='gif'>");
                         personImage.attr("src", results[i].images.fixed_height.url);
+                        personImage.attr("data-still", results[i].images.fixed_height.url);
+                        personImage.attr("data-animate", results[i].images.original_still); 
+                        personImage.attr("data-state='still'");{
 
-                        gifDiv.prepend(p);
-                        gifDiv.prepend(personImage);
 
-                        $("#gifs-appear-here").prepend(gifDiv);
+                            // Need to generate image sources with a "still" id. & "replace with animate tag" 
+                            // // That didn't work, so added attr to personImage for data-still and data-animate. mimicking pausing-gifs activity.
+
+                            gifDiv.prepend(p);
+                            gifDiv.prepend(personImage);
+
+                            $("#gifs-appear-here").prepend(gifDiv);
+                        }
                     }
 
                     // End of Gif Sorter
 
+                    // Gif Pauser/Starter
+
+                    $(".gif").on("click", function () {
+
+                        var state = $(this).attr("data-state");
+                        console.log(state);
+
+                        if (state === "still") {
+                            var replace = $("<img>");
+                            replace = ($(this).attr("src", $(this).attr("data-animate")));
+                            $(this).attr("data-state", "animate")
+
+                        } else {
+                            var replace = $("<img>");
+                            replace = ($(this).attr("src", $(this).attr("data-still")));
+                            $(this).attr("data-state", "still")
+
+                            }
+                        });
+
+                    // Gif Ratings holder
                     // Creating a div to hold the movie
                     var movieDiv = $("<div class='movie'>");
 
@@ -88,9 +121,30 @@
                     var pOne = $("<p>").text("Rating: " + rating);
 
                     $("#movies-view").prepend(movieDiv);
-                });
 
-            }
+
+                });
+            };
+
+            // function Switch() {
+            //     var state = $(this).attr("data-state");
+            //     console.log(state);
+
+            //     if (state === "still") {
+            //         // update data-state attr to "animate"
+            //         // update src to the data-animate attribute
+            //         var animateGif = $(this).attr("data-animate");
+            //         $(this).attr("src", animateGif);
+            //         $(this).attr("data-state", "animate");
+            //     } else {
+            //         // update state to "still"
+            //         // update src to the data-still attribute
+            //         var stillGif = $(this).attr("data-still");
+            //         $(this).attr("src", stillGif);
+            //         $(this).attr("data-state", "still");
+            //     }
+            // }
+
 
             // Function for displaying subject data
             function renderButtons() {
@@ -126,6 +180,7 @@
 
             $(document).on("click", ".movie-btn", displayMovieInfo);
             renderButtons();
+
         </script>
     </div>
 </body>
